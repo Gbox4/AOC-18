@@ -431,7 +431,6 @@ def twoPoints(p1,p2):
 
 code = parse(puzzle)
 
-board = []
 
 xmax = 0
 xmin = 0
@@ -449,15 +448,9 @@ for p in code:
     if p.y < ymin:
         ymin = p.y
 
-for i in range(ymin, ymax):
-    new = []
-    for j in range(xmin,xmax):
-        new.append(".")
-    board.append(new)
 
 
 loopn = 0
-
 loopmin = 0
 loopmax = 0
 
@@ -470,15 +463,16 @@ while True:
 
     for p in code:
         #finding largest and smallest on x axis
+
+        p.x += p.xv
+        p.y -= p.yv
+
         if p.x < loopmin:
             loopmin = p.x
         
         if p.x > loopmax:
             loopmax = p.x
-
-
-        if not (p.x+p.xv > xmax or p.y+p.yv > ymax or p.y+p.yv < ymin or p.x+p.xv < xmin):
-            board[p.y-ymin][p.x-xmin] = "#"
+            
     
 
     
@@ -488,12 +482,3 @@ while True:
     #ALL CODE TO SEE IF THIS IS A GOOD OUTPUT GOES HERE
     xdist = abs(loopmax-loopmin)
     print("X distance: {0}".format(xdist),"/nLoop number: {0}".format(loopn))
-    sleep(500)
-
-    
-    #resetting board
-    for p in code:
-        if not (p.x+p.xv > xmax or p.y+p.yv > ymax or p.y+p.yv < ymin or p.x+p.xv < xmin):
-            board[p.y-ymin][p.x-xmin] = "."
-            p.x += p.xv
-            p.y += p.yv
