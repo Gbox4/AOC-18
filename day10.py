@@ -390,6 +390,29 @@ class Point:
         self.xv = xv
         self.yv = yv
 
+def printBoard(code, length, xmin, ymin):
+    length += 5
+    board = []
+    for y in range(length):
+        newRow = []
+        for x in range(length):
+            newRow.append(".")
+        board.append(newRow)
+    
+    for p in code:
+        #its minus because the xmin is positive
+        boardposy = p.y-ymin
+        boardposx = p.x-xmin
+        if not (boardposy >= length or boardposx >= length):
+            board[boardposy][boardposx] = "#"
+
+    for y in range(len(board)):
+        prtrow = ""
+        for x in range(len(board[y])):
+            prtrow = prtrow + board[y][x]
+        
+        print(prtrow)
+
 def parse(code):
     code = code.split("\n")
     new = []
@@ -451,15 +474,23 @@ for p in code:
 
 
 loopn = 0
-loopmin = 0
-loopmax = 0
+loopminx = 0
+loopmaxx = 0
+loopminy = 0
+loopmaxy = 0
+lastxdist = 9999999
+lastydist = 9999999
+
+passedmindist = False
 
 while True:
 
     loopn += 1
 
-    loopmin = (xmin+xmax)/2
-    loopmax = (xmin+xmax)/2
+    loopminx = (xmin+xmax)/2
+    loopmaxx = (xmin+xmax)/2
+    loopminy = (xmin+xmax)/2
+    loopmaxy = (xmin+xmax)/2
 
     for p in code:
         #finding largest and smallest on x axis
@@ -467,18 +498,35 @@ while True:
         p.x += p.xv
         p.y -= p.yv
 
-        if p.x < loopmin:
-            loopmin = p.x
+        if p.x < loopminx:
+            loopminx = p.x
         
-        if p.x > loopmax:
-            loopmax = p.x
-            
-    
-
-    
+        if p.x > loopmaxx:
+            loopmaxx = p.x
         
-            
+        if p.y < loopminy:
+            loopminy = p.y
+        
+        if p.y > loopmaxy:
+            loopmaxy = p.y
+    
+    xdist = abs(loopmaxx-loopminx)
+    ydist = abs(loopmaxy-loopminy)
+    
 
     #ALL CODE TO SEE IF THIS IS A GOOD OUTPUT GOES HERE
-    xdist = abs(loopmax-loopmin)
-    print("X distance: {0}".format(xdist),"/nLoop number: {0}".format(loopn))
+    
+
+    if loopn <= 10003 and loopn >= 10000:
+    #if xdist > lastxdist:
+        br = ""
+        for i in range(120):
+            br = br+"-"
+        print (br)
+        printBoard(code, 100, loopminx, loopminy)
+        #print("X distance: {0}".format(xdist), "Y distance: {0}".format(ydist), "Loop number: {0}".format(loopn))
+        break
+
+    lastxdist = xdist
+    lastydist = ydist
+
