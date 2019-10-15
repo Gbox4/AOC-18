@@ -393,14 +393,14 @@ class Point:
 def printBoard(code, length, xmin, ymin):
     length += 5
     board = []
-    for y in range(length):
+    for y in range(int(length/10)):
         newRow = []
         for x in range(length):
             newRow.append(".")
         board.append(newRow)
     
     for p in code:
-        #its minus because the xmin is positive
+
         boardposy = p.y-ymin
         boardposx = p.x-xmin
         if not (boardposy >= length or boardposx >= length):
@@ -487,6 +487,9 @@ while True:
 
     loopn += 1
 
+    if loopn % 100 == 0:
+        print(loopn)
+
     loopminx = (xmin+xmax)/2
     loopmaxx = (xmin+xmax)/2
     loopminy = (xmin+xmax)/2
@@ -517,15 +520,16 @@ while True:
     #ALL CODE TO SEE IF THIS IS A GOOD OUTPUT GOES HERE
     
 
-    if loopn <= 10003 and loopn >= 10000:
+    if loopn >= 9900:
     #if xdist > lastxdist:
         br = ""
-        for i in range(120):
+        for i in range(150):
             br = br+"-"
         print (br)
-        printBoard(code, 100, loopminx, loopminy)
+        printBoard(code, 200, loopminx, loopmaxy)
         #print("X distance: {0}".format(xdist), "Y distance: {0}".format(ydist), "Loop number: {0}".format(loopn))
-        break
+    
+
 
     lastxdist = xdist
     lastydist = ydist
