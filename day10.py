@@ -383,35 +383,13 @@ if True:
     position=< 50228, -29884> velocity=<-5,  3>
     position=< 30230, -39883> velocity=<-3,  4>"""
 
+
 class Point:
     def __init__(self, x, y, xv, yv):
         self.x = x
         self.y = y
         self.xv = xv
         self.yv = yv
-
-def printBoard(code, length, xmin, ymin):
-    length += 5
-    board = []
-    for y in range(int(length/10)):
-        newRow = []
-        for x in range(length):
-            newRow.append(".")
-        board.append(newRow)
-    
-    for p in code:
-
-        boardposy = p.y-ymin
-        boardposx = p.x-xmin
-        if not (boardposy >= length or boardposx >= length):
-            board[boardposy][boardposx] = "#"
-
-    for y in range(len(board)):
-        prtrow = ""
-        for x in range(len(board[y])):
-            prtrow = prtrow + board[y][x]
-        
-        print(prtrow)
 
 def parse(code):
     code = code.split("\n")
@@ -444,93 +422,61 @@ def parse(code):
 
     return new
 
-def twoPoints(p1,p2):
-    if p1.x == p2.x and p1.y == p2.y:
-        return True
+def printBoard(code, xrng,yrng,xmin,ymin):
+    board=[]
+    for y in range(yrng+1):
+        newline=[]
+        for x in range(xrng+1):
+            newline.append(".")
+        board.append(newline)
+    for p in code:
+        boardx=p.x-xmin
+        boardy=p.y-ymin
+        board[boardy][boardx] = "#"
 
-    else:
-        return False
+    for y in board:
+        newline=""
+        for x in y:
+            newline=newline+x
+        print(newline)
+
 
 
 code = parse(puzzle)
 
-
-xmax = 0
-xmin = 0
-ymax = 0
-ymin = 0
-
-for p in code:
-    if p.x > xmax:
-        xmax = p.x
-    if p.y > ymax:
-        ymax = p.y
-    
-    if p.x < xmin:
-        xmin = p.x
-    if p.y < ymin:
-        ymin = p.y
-
-
-
-loopn = 0
-loopminx = 0
-loopmaxx = 0
-loopminy = 0
-loopmaxy = 0
-lastxdist = 9999999
-lastydist = 9999999
-
-passedmindist = False
+prexrng=99999999
+preyrng=99999999
+loops = 0
 
 while True:
-
-    loopn += 1
-
-    if loopn % 100 == 0:
-        print(loopn)
-
-    loopminx = (xmin+xmax)/2
-    loopmaxx = (xmin+xmax)/2
-    loopminy = (xmin+xmax)/2
-    loopmaxy = (xmin+xmax)/2
-
+    xmax=0
+    xmin=0
+    ymax=0
+    ymin=0
     for p in code:
-        #finding largest and smallest on x axis
-
         p.x += p.xv
-        p.y -= p.yv
+        p.y += p.yv
+        xmax = max(xmax,p.x)
+        xmin = min(xmin,p.x)
+        ymax = max(ymax,p.y)
+        ymin = min(ymin,p.y)
+    xrng=abs(xmax-xmin)
+    yrng=abs(ymax-ymin)
 
-        if p.x < loopminx:
-            loopminx = p.x
+    if loops==10002:
+        printBoard(code, xrng, yrng, xmin, ymin)
+        break
+
+    #if xrng > prexrng:
         
-        if p.x > loopmaxx:
-            loopmaxx = p.x
-        
-        if p.y < loopminy:
-            loopminy = p.y
-        
-        if p.y > loopmaxy:
-            loopmaxy = p.y
+    #    print("X minimum distance at: ",loops-1)
+    #    break
     
-    xdist = abs(loopmaxx-loopminx)
-    ydist = abs(loopmaxy-loopminy)
+    #if yrng > preyrng:
+    #print("Y minimum distance at: ",loops-1)
+
+
     
-
-    #ALL CODE TO SEE IF THIS IS A GOOD OUTPUT GOES HERE
-    
-
-    if loopn >= 9900:
-    #if xdist > lastxdist:
-        br = ""
-        for i in range(150):
-            br = br+"-"
-        print (br)
-        printBoard(code, 200, loopminx, loopmaxy)
-        #print("X distance: {0}".format(xdist), "Y distance: {0}".format(ydist), "Loop number: {0}".format(loopn))
-    
-
-
-    lastxdist = xdist
-    lastydist = ydist
-
+    prexrng=xrng
+    preyrng=yrng
+    loops+=1
