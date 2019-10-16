@@ -19,12 +19,13 @@ def specialMarble(marbn):
 
 
 #linked list
-class linkedListE:
-    def __init__(self,linkedlist, prev, fol):
+class linkedListElement:
+    def __init__(self,val,linkedlist, prev, fol):
         self.linkedlist = linkedlist
-        #fol = following
+        self.val=val
         self.prev = prev
-        self.next = fol
+        self.fol = fol
+
 
 #player datastucture
 class player:
