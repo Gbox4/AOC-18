@@ -10,6 +10,11 @@ class Pot:
         self.isZero=False
         self.id=id
 
+class Generation:
+    def __init__(self,gen,total):
+        self.gen=gen
+        self.total=total
+
 #id != place in the line. it is just to give each pot a unique id
 currentId=0
 
@@ -125,20 +130,23 @@ def calcTotal():
             total+=getPotRelativeIndex(i.id)
     return(total)
 
+gens = []
 
-gens = 0
-for i in range(20):
-    gens+=1
+genNum = 0
+for i in range(2000):
     generate()
+    gens.append(Generation(genNum,calcTotal()))
+    genNum+=1
 
-    if gens % 1000 ==0:
-        print(gens)
+firstTotal=gens[1].total
+for i in range(1,int((len(gens)/2)-1)):
+    if (gens[i].total-firstTotal)==gens[i*2].total-gens[i].total:
+        print("Generation:",gens[i].gen,"  Total:",gens[i].total)
 
-    
 
 
 
-total = calcTotal()
-print("Generation:",gens,"  Total:",total)
+
+
 
 print("Program End.")
