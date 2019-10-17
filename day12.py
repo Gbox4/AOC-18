@@ -133,15 +133,23 @@ def calcTotal():
 gens = []
 
 genNum = 0
-for i in range(2000):
+for i in range(200):
     generate()
     gens.append(Generation(genNum,calcTotal()))
     genNum+=1
 
 firstTotal=gens[1].total
-for i in range(1,int((len(gens)/2)-1)):
-    if (gens[i].total-firstTotal)==gens[i*2].total-gens[i].total:
-        print("Generation:",gens[i].gen,"  Total:",gens[i].total)
+
+difs=[]
+for i in range(1,len(gens)):
+    try:
+        dif = gens[i].total-gens[i-1].total
+        #if dif in difs:
+        print("generation: {0}      difference: {1}          total: {2}".format(i+1,dif,gens[i].total))
+        #else:
+            #difs.append(dif)
+    except:
+        break
 
 
 
